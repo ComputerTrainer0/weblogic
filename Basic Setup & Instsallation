@@ -1,0 +1,36 @@
+    1  clear
+    2  sudo su -
+    3  vi /etc/hosts
+        10.0.15.140 wls-host1 # Replace with your IP
+    4  ping wls-host1
+    3  clear
+    4  cd /opt/dumps
+    5  mkdir /opt/dumps
+    6  sudo mkdir /opt/dumps
+    7  sudo chown wls:wls mkdir /opt/ -R
+    8  sudo chown wls:wls /opt/ -R
+    9  sudo mkdir /u01
+   10  sudo chown wls:wls /u01/
+   11  cd /opt/dumps/
+   12  ls -ltr
+   13  ping www.google.com
+   14  ls -ltr
+   15  history
+
+export PATH=/u01/apps/java/bin/:$PATH
+vi ~/.bashrc Or vi /etc/bashrc
+PATH=/u01/apps/java/bin/:$PATH
+
+Installation Location:
+/u01/apps/Oracle/oraInventory
+/u01/apps/Oracle/Middleware/Oracle_Home
+
+
+For Command line - slient installation:
+
+vi ~/oraInst.loc
+inventory_loc=/u01/apps/Oracle/oraInventory/
+inst_group=wls
+
+java -jar /opt/dumps/fmw_14.1.1.0.0_wls_lite_generic.jar -silent -responseFile ~/response-gui -invPtrLoc ~/oraInst.loc
+

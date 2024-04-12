@@ -1,0 +1,57 @@
+# Setting Up Your Standalone Domain
+
+  mkdir /u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Dev_tele_Domain
+  cd /u01/apps/Oracle/Middleware/Oracle_Home/oracle_common/common/bin/
+  ./config.sh #If GUI is buggy close and reopen.
+  cd /u01/
+  mkdir domains
+  cd  domains/
+  ln -s /u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Dev_tele_Domain/ Dev_tele_Domain
+
+#Start the Weblogic AdminServer JVM.
+
+  vi config/config.xml
+  #Update the server tag to have thse
+  
+    <server>
+      <name>AdminServer</name>
+      <ssl>
+        <name>AdminServer</name>
+        <listen-port>8002</listen-port>
+      </ssl>
+      <listen-port>8001</listen-port>
+      <listen-address>wls-host1</listen-address>
+    </server>
+  
+  :wq #Save and quit
+  
+  nohup /u01/domains/Dev_tele_Domain/bin/startWebLogic.sh &
+  cd  /u01/domains/Dev_tele_Domain/
+
+#Accessing the admin console
+
+  #Disable SELINUX
+  vi /etc/selinux/config
+  #Change the following from Enforcing to disabled
+  SELINUX=disabled
+  :wq #Save and Quit
+  
+  #Disable Firewall
+  systemctl status firewalld
+  systemctl stop firewalld
+  sudo systemctl disable firewalld
+  
+  run reboot as root user or sudo
+  
+  Once restarted please start weblogic and open browser from your laptop and enter the following URL:
+  http://wls-host1:8001/console/
+
+
+#Standalone Deployment
+
+
+
+#Admin Server Password Reset
+
+
+

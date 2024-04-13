@@ -49,9 +49,17 @@
 
 #Standalone Deployment
 
+sudo yum -y install git-core
+git clone https://github.com/ComputerTrainer0/EAR
 
 
 #Admin Server Password Reset
 
-
+cp DefaultAuthenticatorInit.ldift DefaultAuthenticatorInit.ldift_back
+cp -rf security/ security_back
+cd ../servers/AdminServer/data/
+mv ldap/ ldap_backup
+./setDomainEnv.sh
+export CLASSPATH=/u01/apps/Oracle/Middleware/Oracle_Home/wlserver/server/lib/weblogic.jar:/u01/apps/Oracle/Middleware/Oracle_Home/wlserver/../oracle_common/modules/thirdparty/ant-contrib-1.0b3.jar:/u01/apps/Oracle/Middleware/Oracle_Home/wlserver/modules/features/oracle.wls.common.nodemanager.jar:/u01/apps/Oracle/Middleware/Oracle_Home/wlserver/common/derby/lib/derbynet.jar:/u01/apps/Oracle/Middleware/Oracle_Home/wlserver/common/derby/lib/derbyclient.jar:/u01/apps/Oracle/Middleware/Oracle_Home/wlserver/common/derby/lib/derby.jar
+java weblogic.security.utils.AdminAccount weblogic weblogic1 .
 

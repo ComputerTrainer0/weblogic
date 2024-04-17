@@ -1,0 +1,72 @@
+Working with WLST
+
+cd /u01/apps/Oracle/Middleware/Oracle_Home/oracle_common/common/bin
+./setWlstEnv.sh
+./wlst.sh
+
+Another way
+/u01/apps/java/bin/java -cp /u01/apps/Oracle/Middleware/Oracle_Home/wlserver/server/lib/weblogic.jar weblogic.WLST
+
+Start Of Your Admin Server:
+startServer('AdminServer','Prod_Tele_Domain1','t3://wls-host1:7001/','weblogic','weblogic123','/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/',jvmArgs='-XX:MaxPermSize=125m,-Xms128m,-Xmx512m,-XX:+UseParallelGC')
+
+Starting your NODE Manager:
+
+startNodeManager(verbose='true', NodeManagerHome='/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/nodemanager/', ListenPort='5556', ListenAddress='wls-host1', jvmArgs='-Xms24m,-Xmx64m')
+
+
+Connect with AdminServer
+
+connect('weblogic','weblogic123','t3://wls-host1:7001')
+
+Edit:
+
+edit()
+startEdit()
+set('ListenPort',9080)
+save()
+activate()
+
+
+Status / Start / Shutdown
+
+state('Prod_Tele_Cluster1','Cluster')
+start('Prod_Tele_MServer2','Server')
+start('Prod_Tele_Cluster1','Cluster')
+shutdown('Prod_Tele_Cluster1','Cluster')
+
+
+Deployment:
+
+cd ('AppDeployments')
+undeploy('Tele')
+deploy('Tele','/opt/dumps/ear/EAR/Tele_v1/Tele.ear',targets="Prod_Tele_Cluster1",planPath="/opt/dumps/ear/EAR/Tele_plan/Plan.xml")
+
+Non-Intractive Mode
+
+wlst_auto.py
+
+startServer('AdminServer','Prod_Tele_Domain1','t3://wls-host1:7001/','weblogic','weblogic123','/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/',jvmArgs='-XX:MaxPermSize=125m,-Xms128m,-Xmx512m,-XX:+UseParallelGC')
+print 'admin server is started'
+startNodeManager(verbose='true', NodeManagerHome='/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/nodemanager/', ListenPort='5556', ListenAddress='wls-host1', jvmArgs='-Xms24m,-Xmx64m')
+print '..'
+print 'NM server is started'
+print '..'
+connect('weblogic','weblogic123','t3://wls-host1:7001')
+print 'connected to the admin server'
+print '..'
+print 'checking the status of the cluster'
+state('Prod_Tele_Cluster1','Cluster')
+print '..'
+undeploy('Tele')
+print 'undeployment completed sucessfully'
+print '..'
+deploy('Tele','/opt/dumps/ear/EAR/Tele_v1/Tele.ear',targets="Prod_Tele_Cluster1",planPath="/opt/dumps/ear/EAR/Tele_plan/Plan.xml")
+print 'deploying'
+print '..'
+print 'starting up the servers'
+print '..'
+start('Prod_Tele_Cluster1','Cluster')
+print 'Job Completed'
+
+:wq

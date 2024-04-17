@@ -1,3 +1,4 @@
+==========================================
 Working with WLST
 
 cd /u01/apps/Oracle/Middleware/Oracle_Home/oracle_common/common/bin
@@ -11,10 +12,10 @@ Start Of Your Admin Server:
 startServer('AdminServer','Prod_Tele_Domain1','t3://wls-host1:7001/','weblogic','weblogic123','/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/',jvmArgs='-XX:MaxPermSize=125m,-Xms128m,-Xmx512m,-XX:+UseParallelGC')
 
 Starting your NODE Manager:
-
 startNodeManager(verbose='true', NodeManagerHome='/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/nodemanager/', ListenPort='5556', ListenAddress='wls-host1', jvmArgs='-Xms24m,-Xmx64m')
 
 
+==========================================
 Connect with AdminServer
 
 connect('weblogic','weblogic123','t3://wls-host1:7001')
@@ -28,6 +29,7 @@ save()
 activate()
 
 
+==========================================
 Status / Start / Shutdown
 
 state('Prod_Tele_Cluster1','Cluster')
@@ -36,12 +38,15 @@ start('Prod_Tele_Cluster1','Cluster')
 shutdown('Prod_Tele_Cluster1','Cluster')
 
 
+==========================================
 Deployment:
 
 cd ('AppDeployments')
 undeploy('Tele')
 deploy('Tele','/opt/dumps/ear/EAR/Tele_v1/Tele.ear',targets="Prod_Tele_Cluster1",planPath="/opt/dumps/ear/EAR/Tele_plan/Plan.xml")
 
+
+==========================================
 Non-Intractive Mode
 
 wlst_auto.py
@@ -70,3 +75,14 @@ start('Prod_Tele_Cluster1','Cluster')
 print 'Job Completed'
 
 :wq
+
+
+==========================================
+Password Decrypting:
+
+domain = "/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1"
+service = weblogic.security.internal.SerializedSystemIni.getEncryptionService(domain)
+encryption = weblogic.security.internal.encryption.ClearOrEncryptedService(service)
+print encryption.decrypt("{AES256}kFQLCv4ifMcaS/i8n7DFFJImFhDFKYkJmpLYE+F0Emw=")
+
+

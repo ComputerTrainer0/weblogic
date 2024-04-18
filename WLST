@@ -86,3 +86,10 @@ encryption = weblogic.security.internal.encryption.ClearOrEncryptedService(servi
 print encryption.decrypt("{AES256}kFQLCv4ifMcaS/i8n7DFFJImFhDFKYkJmpLYE+F0Emw=")
 
 
+Connecting to NM:
+
+nmConnect('weblogic', 'weblogic123', 'wls-host1', '5556','Prod_Tele_Domain1','/u01/apps/Oracle/Middleware/Oracle_Home/user_projects/domains/Prod_Tele_Domain1/')
+help('nodemanager')
+nmServerStatus('Prod_Tele_MServer1')
+
+

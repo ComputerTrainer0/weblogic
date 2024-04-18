@@ -1,0 +1,52 @@
+#Installation Of HTTP Server
+
+Download and extract the http.tar file package. It should be extracted on the below path only.
+/opt/httpd/
+
+#Configuration Of Default website
+
+vi /opt/httpd/conf/httpd.conf 
+
+  <VirtualHost *:80>
+  KeepAliveTimeout 60
+  MaxKeepAliveRequests 0
+  ServerAdmin admin@tele.com
+  DocumentRoot /opt/content/tele/
+  ServerName www.tele.com
+  ServerAlias tele.com
+  ErrorLog logs/tele.com-error_log
+  CustomLog logs/tele.com-access_log common
+  </VirtualHost>
+
+<Directory /opt/content/tele>
+    Options FollowSymLinks
+    AllowOverride None
+    FileETag All -INode
+    Require all granted
+</Directory>
+
+
+Creating Default Index.html
+
+cd /opt/content/tele
+
+vi index.html 
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="tele" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<h2>This is the tele website</h2>
+<p>This is just an example of an tele </p>
+
+  <nav>
+    <ul>
+      <li><a href="/tele_ear">Tele</a></li>
+      <li><a href="/CityInfoDemo">City Info</a></li>
+    </ul>
+  </nav>
+
+</body>
+</html>

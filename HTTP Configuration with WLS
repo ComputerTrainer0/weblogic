@@ -1,11 +1,16 @@
 #Installation Of HTTP Server
 
+sudo yum -y install apr apr-util
+
+Http For Weblogic Including Modules
+https://drive.google.com/drive/folders/1YReyTzvRD9XRH9Va63AhP3cvjmQmY47M?usp=sharing
+
 Download and extract the http.tar file package. It should be extracted on the below path only.
 /opt/httpd/
 
 #Configuration Of Default website
 
-vi /opt/httpd/conf/httpd.conf 
+vi /opt/httpd/conf/extra/httpd-vhosts.conf
 
   <VirtualHost *:80>
   KeepAliveTimeout 60
@@ -50,3 +55,35 @@ vi index.html
 
 </body>
 </html>
+
+#plugin Download:
+
+https://www.oracle.com/middleware/technologies/webtier-downloads.html#
+
+#Plugin Configuration
+
+vi /opt/httpd/conf/httpd.conf
+
+LoadModule weblogic_module /opt/httpd/modules/mod_wl_24.so
+
+vi /opt/httpd/conf/extra/httpd-vhosts.conf
+
+  <Location /tele_ear>
+        SetHandler weblogic-handler
+        WebLogicHost wls-host1
+        WebLogicPort 8080
+  </Location>
+
+For Cluster: 
+
+  <Location /tele_ear>
+        SetHandler weblogic-handler
+        WebLogicCluster wls-host1:8080,wls-host1:9080
+  </Location>
+
+  <Location /CityInfoDemo>
+        SetHandler weblogic-handler
+        WebLogicCluster wls-host1:8080,wls-host1:9080
+  </Location>
+
+

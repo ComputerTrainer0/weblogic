@@ -1,0 +1,72 @@
+#One File for two Alias
+
+keytool -genkey -keyalg RSA -alias tele -keystore /u01/domains/Prod_Tele_Domain1/security/tele.jks -storepass changeit -validity 400 -keysize 2048
+
+
+
+Http server:
+
+openssl genrsa -des3 -out www.tele.com.key 1024
+openssl req -new -key www.tele.com.key -out www.tele.com.csr
+openssl x509 -req -days 365 -in www.tele.com.csr -signkey www.tele.com.key  -out www.tele.com.crt
+
+
+SSL configuration On HTTP Server.
+vi /opt/httpd/conf/extra/httpd-vhosts.conf
+
+  <VirtualHost *:80>
+  KeepAliveTimeout 60
+  MaxKeepAliveRequests 0
+  ServerAdmin admin@tele.com
+  DocumentRoot /opt/content/tele/
+  ServerName www.tele.com
+  ServerAlias tele.com
+  ErrorLog logs/tele.com-error_log
+  CustomLog logs/tele.com-access_log common
+
+  </VirtualHost>
+
+Listen wls-host1:443
+
+  <VirtualHost *:443>
+  KeepAliveTimeout 60
+  MaxKeepAliveRequests 0
+  ServerAdmin admin@tele.com
+  DocumentRoot /opt/content/tele/
+  ServerName www.tele.com
+  ServerAlias tele.com
+  ErrorLog logs/tele.com-ssl-error_log
+  CustomLog logs/tele.com-ssl-access_log common
+
+  SSLEngine on
+  SSLProtocol all -SSLv2 -SSLv3
+  #SSLProtocol  -SSLv2 -SSLv3 -TLSv1.0 +TLSv1.1 +TLSv1.2
+  SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+  #SSLCipherSuite RC4-SHA:AES128-SHA:HIGH:MEDIUM:!aNULL:!MD5
+  SSLCertificateFile /opt/httpd/ssl/tele.crt
+  SSLCertificateKeyFile /opt/httpd/ssl/tele.key
+
+  <Location /tele_ear>
+        SetHandler weblogic-handler
+        WebLogicCluster wls-host1:8080,wls-host1:9080
+  </Location>
+
+  <Location /CityInfoDemo>
+        SetHandler weblogic-handler
+        WebLogicCluster wls-host1:8080,wls-host1:9080
+  </Location>
+  </VirtualHost>
+
+<Directory /opt/content/tele>
+    Options FollowSymLinks
+    AllowOverride None
+    FileETag All -INode
+    Require all granted
+</Directory>
+
+:wq
+
+
+
+
+

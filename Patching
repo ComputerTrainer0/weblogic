@@ -1,0 +1,40 @@
+
+#Getting Current Version Info:
+
+#1st way
+cd $ORACLE_HOME/inventory
+less registry.xml
+
+2rd way
+Adminserver.log  when JVM Starts
+
+3rd Way
+Look at your Admin Console
+
+4th way
+weblogic.jar
+cd $ORACLE_HOME/wlserver/server/lib/
+java -cp weblogic.jar weblogic.version
+
+
+#For Opatch Version infomation
+cd $ORACLE_HOME/OPatch/bin/
+
+opatch -help
+
+Min Opatch Version needed 13.9.4.2.5
+opatch version
+opatch lsinventory
+
+
+Applying OPATCH:
+
+java -jar opatch_generic.jar -silent oracle_home=<ORACLE_HOME> -invPtrLoc <ORAINST.LOC>
+
+Applying PSU and SPB:
+
+opatch lspatches
+
+#Running a report:
+opatch napply -report -oh <ORACLE_HOME> -phBaseFile 
+opatch napply  -oh <ORACLE_HOME> -phBaseFile 

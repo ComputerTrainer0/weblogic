@@ -1,0 +1,51 @@
+
+# Docker Installation:
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl start docker
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+
+sudo vi /etc/systemd/system/multi-user.target.wants/docker.service
+--default-ulimit nofile=65536:65536
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+
+#Download JAVA & Weblogic
+
+/opt/dumps/java/
+jdk-8u411-linux-x64.tar.gz
+/opt/dumps/wls/
+fmw_12.2.1.4.0_wls_quick_slim_Disk1_1of1.zip
+
+cd /opt/dumps/Oracle_Git_Repo/
+git clone https://github.com/oracle/docker-images/
+
+cd /opt/dumps/docker/Oracle_Git_Repo/docker-images/OracleJava/
+cp -rf /opt/dumps/java/jdk-8u411-linux-x64.tar.gz . 
+
+cd /opt/dumps/docker/Oracle_Git_Repo/docker-images/OracleWebLogic/dockerfiles/12.2.1.4
+cp -rf /opt/dumps/wls/fmw_14.1.1.0.0_wls_lite_slim_Disk1_1of1.zip .
+
+
+# Building JDK Image and Weblogic Image:
+
+#Build JDK8 For WLS 12
+sudo ./build.sh
+
+#Build JRE8 For WLS 12 Installation:
+sudo docker build -t oracle/serverjre:8 .
+sudo ./buildDockerImage.sh -v 12.2.1.4 -m
+
+#Checking the Images:
+sudo docker images
+
+
+Creating A Domain:
+
+sudo docker run -d -p 7001:7001 -p 9002:9002  -v /opt/dumps/docker/Oracle_Git_Repo/docker-images/OracleWebLogic/dockerfiles/14.1.1.0/properties/:/u01/oracle/properties -e ADMINISTRATION_PORT_ENABLED=true -e DOMAIN_NAME=docker_domain -e ADMIN_NAME=docker-AdminServer oracle/weblogic:14.1.1.0-slim-8
+

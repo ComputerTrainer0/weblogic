@@ -51,6 +51,8 @@ sudo docker run -d -p 7001:7001 -p 9002:9002  -v /opt/dumps/docker/Oracle_Git_Re
 
 #Create Domain
 
+sudo docker exec -it 64c9504206fc bash
+
 vi newprofile.py
 
 readTemplate('/u01/oracle/wlserver/common/templates/wls/wls.jar')
@@ -66,6 +68,11 @@ writeDomain('/u01/oracle//user_projects/domains/PROD_Tele_domain1')
 closeTemplate()
 exit()
 :wq
+
+oracle_common/common/bin/wlst.sh  newprofile.py
+mkdir ../servers/AdminServer/security
+
+cat > ../servers/AdminServer/security/boot.properties
 
 
 #Deployment

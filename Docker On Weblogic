@@ -24,11 +24,7 @@ jdk-11.0.21_linux-x64_bin.tar.gz
 fmw_14.1.1.0.0_wls_lite_Disk1_1of1.zip
 
 
-sha256sum jdk-11.0.21_linux-x64_bin.tar.gz
-vi Dockerfile.8
-#update the Checksum
-sudo ./build.sh 8
-sudo docker images
+#build JAVA
 
 cd /opt/dumps/Oracle_Git_Repo/
 git clone https://github.com/oracle/docker-images/
@@ -36,11 +32,16 @@ git clone https://github.com/oracle/docker-images/
 cd /opt/dumps/docker/Oracle_Git_Repo/docker-images/OracleJava/
 cp -rf /opt/dumps/wls/jdk-11.0.21_linux-x64_bin.tar.gz . 
 
-cd /opt/dumps/docker/Oracle_Git_Repo/docker-images/OracleWebLogic/dockerfiles/12.2.1.4
-cp -rf /opt/dumps/wls/fmw_14.1.1.0.0_wls_lite_Disk1_1of1.zip .
+sha256sum jdk-11.0.21_linux-x64_bin.tar.gz
+vi Dockerfile.8
+#update the Checksum
+sudo ./build.sh 8
+sudo docker images
+sudo  docker tag 60e48d339846 oracle/jdk:11
 
 #Build Weblogic Image
-sudo  docker tag 60e48d339846 oracle/jdk:11
+cd /opt/dumps/docker/Oracle_Git_Repo/docker-images/OracleWebLogic/dockerfiles/12.2.1.4
+cp -rf /opt/dumps/wls/fmw_14.1.1.0.0_wls_lite_Disk1_1of1.zip .
 
 sudo ./buildDockerImage.sh -v 14.1.1.0 -g -j 11
 
